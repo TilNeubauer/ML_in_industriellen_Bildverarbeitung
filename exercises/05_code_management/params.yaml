@@ -1,0 +1,9 @@
+pipeline:
+  type: sklearn.pipeline.Pipeline
+  steps:
+    - name: scale
+      type: sklearn.preprocessing.StandardScaler
+    - name: classifier
+      type: sklearn.svm.SVC
+      init_args:
+        C: 2
