@@ -36,7 +36,6 @@ def save_pickle(model, path):
 
 
 def load_pickle(path):
-    # Pickle-Dateien nur laden, wenn sie aus einer vertrauenswuerdigen Quelle stammen.
     with path.open("rb") as file:
         return pickle.load(file)
 
