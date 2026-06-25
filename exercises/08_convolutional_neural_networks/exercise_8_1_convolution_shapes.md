@@ -1,36 +1,64 @@
-# Exercise 8.1 – Output shape per input and kernel shape
+# Exercise 8.1: Convolution Output Shape
 
-## Aufgabenstellung
+Input:
 
-Für ein Eingabebild der Größe `(a × b)` und einen Kernel der Größe `(c × d)`:
+```text
+height = a
+width  = b
+kernel height = c
+kernel width  = d
+padding = p
+stride  = s
+```
 
-1. Gib die Ausgabegröße ohne Padding und mit Stride `s=1` an.
-2. Erweitere sie um Padding bei `s=1`.
-3. Erweitere sie um Stride ohne Padding.
-4. Gib die allgemeine Formel für Padding und Stride an.
-5. Bestimme das Padding für gleiche Ein- und Ausgabegröße bei `s=1`.
+## No Padding, Stride 1
 
-## Lösung
+```text
+output height = a - c + 1
+output width  = b - d + 1
+```
 
+## Padding, Stride 1
 
-Die folgenden Formeln gelten für jede Raumrichtung getrennt. Die 2D-Ausgabe
-entsteht, indem die Formel einmal für `a, c` und einmal für `b, d` verwendet
-wird.
+```text
+output height = a + 2p - c + 1
+output width  = b + 2p - d + 1
+```
 
-| Fall | Höhe der Ausgabe |
-| --- | --- |
-| Kein Padding, `s=1` | `a - c + 1` |
-| Padding `p`, `s=1` | `a + 2p - c + 1` |
-| Kein Padding, Stride `s` | `floor((a - c) / s) + 1` |
-| Padding `p`, Stride `s` | `floor((a + 2p - c) / s) + 1` |
+## No Padding, Stride s
 
-Damit bei `s=1` die Ausgabe genauso hoch wie die Eingabe wird, muss gelten:
+```text
+output height = floor((a - c) / s) + 1
+output width  = floor((b - d) / s) + 1
+```
+
+## Padding and Stride s
+
+```text
+output height = floor((a + 2p - c) / s) + 1
+output width  = floor((b + 2p - d) / s) + 1
+```
+
+## Same Output Size
+
+For `s = 1`, same output height as input height means:
 
 ```text
 a + 2p - c + 1 = a
+2p = c - 1
 p = (c - 1) / 2
 ```
 
-Das ist bei ungeraden Kernelgrößen ganzzahlig, etwa `p=1` für `c=3`.
-Bei geraden Kernelgrößen ist symmetrisches „same padding“ ohne zusätzliche
-asymmetrische Randbehandlung nicht möglich.
+For the width:
+
+```text
+p = (d - 1) / 2
+```
+
+So for a `3 x 3` kernel, use:
+
+```text
+p = 1
+```
+
+This works cleanly for odd kernel sizes. Even kernel sizes need asymmetric padding if the output should have exactly the same size.
