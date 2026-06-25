@@ -1,8 +1,5 @@
-"""Exercise 2.2: Normale SVM-Vektoren und Klassifikation zweier Punkte.
-
-Aufgabenstellung:
-1. Berechne den zur Trennlinie normalen Vektor w für die zwei vorgegebenen Linien.
-2. Klassifiziere a = [1.4, 5.1]^T und b = [4.7, 7.0]^T.
+"""Exercise 2.2:
+    AUfgabenstelleung s. https://kandolfp.github.io/MECH-M-DUAL-2-MLB/clustering/supervised.html
 
 Aufruf: pdm run python exercises/02_supervised_learning/exercise_2_2_linear_svm.py
 """
@@ -12,6 +9,7 @@ import numpy as np
 
 def normal_vector(first, second):
     """Gibt einen Normalenvektor der durch zwei Punkte bestimmten Geraden zurück."""
+    # Normalvec für Gerade die durch 2 Punkte Bestimmt wird 
     direction = np.asarray(second) - np.asarray(first)
     return np.array([-direction[1], direction[0]]) / np.linalg.norm(direction)
 
