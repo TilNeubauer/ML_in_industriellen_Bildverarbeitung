@@ -203,6 +203,10 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# Generated nested DVC demo repositories
+results/exercise_5_4/
+results/.dvc_site_cache/repo/
+
 # Ruff stuff:
 .ruff_cache/
 
