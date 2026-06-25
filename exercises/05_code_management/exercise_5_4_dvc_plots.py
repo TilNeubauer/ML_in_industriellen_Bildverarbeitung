@@ -6,6 +6,11 @@ visualize the experiments and there differences.
 Unterstützt von chat-GPT
 
 Aufruf: pdm run python exercises/05_code_management/exercise_5_4_dvc_plots.py
+
+
+Ergebnisse: 
+    können nicht im Git repo enthalten sein da sonst ein git-repo im git-repo enthalten ist. 
+    Durch aufrufen der Datei wird jedoch alles automatisch erzeugt
 """
 
 import os
