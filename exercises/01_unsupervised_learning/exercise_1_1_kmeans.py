@@ -1,20 +1,28 @@
-"""Exercise 1.1: K-means auf Iris, Moons und Cats-vs-Dogs-Wavelets.
+"""Exercise 1.1 (Apply the -means algorithm to other datasets) As an exercise,
+     to get some practice for using -means, apply the algorithm to some other datasets to see how it performs.
+
+    We already looked at the Fisher Iris dataset (see the introduction this part of the notes)
+    and discussed some basic features. Try with only two dimensional data, as well as four dimensional 
+    data to find the three clusters.
+
+    For Figure 1.7 we will look at the moons dataset. Try working out the clusters in this case.
+
+    Apply the algorithm to the cats and dogs (in wavelet basis, see the introduction this part of the notes)
+    for various principal components and find the two clusters.
+
 
 Aufruf: pdm run python exercises/01_unsupervised_learning/exercise_1_1_kmeans.py
-Die Abbildungen und Kennzahlen werden unter results/exercise_1_1/ gespeichert.
+Ergebnisse: exeecise_1_1
 """
 
 import os
-from io import BytesIO
 from pathlib import Path
-from urllib.request import urlopen
 
+# oeffene der Plots wird unterdrückt 
 os.environ["MPLBACKEND"] = "Agg"
 os.environ["MPLCONFIGDIR"] = str(Path("results/.matplotlib").resolve())
 
 import matplotlib.pyplot as plt
-import numpy as np
-from scipy.io import loadmat
 from sklearn.cluster import KMeans
 from sklearn.datasets import load_iris, make_moons
 from sklearn.decomposition import PCA
@@ -63,40 +71,15 @@ def moons_experiment():
     data, truth = make_moons(n_samples=1_000, noise=0.05, random_state=SEED)
     _, labels = fit_kmeans(data, clusters=2)
     score = adjusted_rand_score(truth, labels)
-    print(f"Moons: ARI = {score:.3f} (K-means trennt nicht-konvexe Monde nur eingeschränkt)")
+    print(f"Moons: ARI = {score:.3f}")
     save_scatter(data, labels, "Moons: K-means", "moons.png")
-
-
-def download_mat(url, key):
-    """Lädt eine Wavelet-Matrix direkt aus den Kursdaten."""
-    with urlopen(url, timeout=30) as response:
-        return loadmat(BytesIO(response.read()))[key]
-
-
-def cats_dogs_experiment():
-    base = "https://github.com/dynamicslab/databook_python/raw/refs/heads/master/DATA/"
-    cats = download_mat(base + "catData_w.mat", "cat_wave")
-    dogs = download_mat(base + "dogData_w.mat", "dog_wave")
-    data = np.concatenate((dogs, cats), axis=1).T
-    truth = np.r_[np.zeros(dogs.shape[1], dtype=int), np.ones(cats.shape[1], dtype=int)]
-
-    for components in (2, 4, 10):
-        embedding = PCA(n_components=components, random_state=SEED).fit_transform(data)
-        _, labels = fit_kmeans(embedding, clusters=2)
-        score = adjusted_rand_score(truth, labels)
-        print(f"Cats vs. Dogs ({components} PCA-Komponenten): ARI = {score:.3f}")
-        save_scatter(
-            embedding[:, :2], labels,
-            f"Cats vs. Dogs: K-means nach PCA ({components} Komponenten)",
-            f"cats_dogs_pca_{components}.png",
-        )
 
 
 def main():
     RESULTS.mkdir(parents=True, exist_ok=True)
     iris_experiment()
     moons_experiment()
-    cats_dogs_experiment()
+    
 
 
 if __name__ == "__main__":
