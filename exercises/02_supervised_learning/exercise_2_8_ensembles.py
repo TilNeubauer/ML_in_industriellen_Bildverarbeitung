@@ -1,9 +1,5 @@
 """Exercise 2.8: Ensemble-Methoden.
 
-Aufgabenstellung: Vergleiche auf Moons Hard-/Soft-Voting (LDA, SVM, Baum),
-Bagging, Random Forest und Stacking. Bestimme außerdem Feature-Importances
-für Iris sowie Dogs-vs-Cats in Rohpixel- und Wavelet-Darstellung.
-
 Aufruf: pdm run python exercises/02_supervised_learning/exercise_2_8_ensembles.py
 """
 
