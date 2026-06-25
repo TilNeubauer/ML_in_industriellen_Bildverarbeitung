@@ -1,8 +1,11 @@
-"""Exercise 2.1: LDA für die Ellipsen und Iris (Versicolor/Virginica).
+"""Exercise 2.1: L
+    Apply the LDA algorithm to the toy example (see Figure 1.1) 
+    to recover the two clusters as good as possible.
 
-Aufgabenstellung:
-1. Wende LDA auf das Beispiel mit zwei Ellipsen an.
-2. Trenne im Fisher-Iris-Datensatz Versicolor und Virginica mittels LDA.
+    Additionally, for a higher dimensional problem, using LDA split the Fisher Iris dataset 
+    (see the introduction to part of the notes) into two clusters. 
+    Try for the harder split between versicolor and virginica types of flowers.
+
 
 Aufruf: pdm run python exercises/02_supervised_learning/exercise_2_1_lda.py
 """
@@ -10,6 +13,7 @@ Aufruf: pdm run python exercises/02_supervised_learning/exercise_2_1_lda.py
 import os
 from pathlib import Path
 
+# oeffene der Plots wird unterdrückt 
 os.environ["MPLBACKEND"] = "Agg"
 os.environ["MPLCONFIGDIR"] = str(Path("results/.matplotlib").resolve())
 
@@ -50,7 +54,10 @@ def evaluate(data, target, title, filename):
 
 def main():
     RESULTS.mkdir(parents=True, exist_ok=True)
-    evaluate(*ellipses(), "LDA: Ellipsen", "ellipses.png")
+
+    data_el, target_el = ellipses()
+    evaluate(data_el, target_el, "LDA: Ellipsen", "ellipses.png")
+    
     iris = load_iris()
     mask = iris.target > 0
     evaluate(iris.data[mask, :2], iris.target[mask] - 1, "LDA: Versicolor vs. Virginica", "iris.png")
