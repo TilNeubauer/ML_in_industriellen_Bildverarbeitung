@@ -1,11 +1,23 @@
-"""Exercise 1.4: Gaussian-Mixture-Modelle auf Ellipsen, Iris und Moons.
+"""Exercise 1.4: 
+    Apply the GMM algorithm to our toy example (the two ellipsoids from Section 1.1) 
+    used through this section to recover the two clusters as good as possible. 
+    This should be straight forward, as we constructed it via Gaussian distributions. 
+    Try constraining the algorithm by imposing the different values possible for covariance_type.
+
+    Additionally, for a higher dimensional problem, split the Fisher Iris dataset into its 
+    three clusters of flowers.
+
+    Try to use GMM to get clusters for the moon dataset used in Section 1.3. 
+    Also try with the BayesianGaussianMixture class, where no amount of clusters needs to be specified.
 
 Aufruf: pdm run python exercises/01_unsupervised_learning/exercise_1_4_gmm.py
+Eergebnisse: exercise_1_4
 """
 
 import os
 from pathlib import Path
 
+# oeffene der Plots wird unterdrückt 
 os.environ["MPLBACKEND"] = "Agg"
 os.environ["MPLCONFIGDIR"] = str(Path("results/.matplotlib").resolve())
 
