@@ -2,6 +2,14 @@
     AUfgabenstelleung s. https://kandolfp.github.io/MECH-M-DUAL-2-MLB/clustering/supervised.html
 
 Aufruf: pdm run python exercises/02_supervised_learning/exercise_2_2_linear_svm.py
+Ergebnisse in Komandozeile: 
+    Ergebnisse rauskopiert: 
+        Fall 1: w = [-0.661  0.751]
+            Punkt a: Klasse +1
+            Punkt b: Klasse -1
+        Fall 2: w = [-0.977 -0.213]
+            Punkt a: Klasse +1
+            Punkt b: Klasse -1
 """
 
 import numpy as np
