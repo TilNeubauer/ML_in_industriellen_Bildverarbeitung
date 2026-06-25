@@ -1,6 +1,13 @@
-"""Exercise 1.3: DBSCAN auf Ellipsen und dem Iris-Datensatz.
+"""Exercise 1.3: 
+    Apply the DBSCAN algorithm to our toy example (the two ellipsoids from Section 1.1) 
+    used throughout this section, to recover the two clusters as good as possible. 
+    Try different values as well as different norms (metric parameter).
+
+    Additionally, for a higher dimensional problem, using DBSCAN to split the Fisher Iris 
+    dataset (see the introduction this part of the notes) into its three clusters of flowers.
 
 Aufruf: pdm run python exercises/01_unsupervised_learning/exercise_1_3_dbscan.py
+Ergebnisse. exercise_1_3
 """
 
 import os
@@ -41,7 +48,14 @@ def save_plot(data, labels, title, name):
 
 def best_dbscan(data, truth):
     scaled = StandardScaler().fit_transform(data)
-    choices = [(eps, metric) for eps in np.linspace(0.2, 1.0, 17) for metric in ("euclidean", "manhattan")]
+
+    eps_values = np.linspace(0.2, 1.0, 17)
+    metrics = ("euclidean", "manhattan")
+    choices = []
+    for eps in eps_values:
+        for metric in metrics:
+            choices.append((eps, metric))
+
     scores = []
     for eps, metric in choices:
         labels = DBSCAN(eps=eps, min_samples=5, metric=metric).fit_predict(scaled)
