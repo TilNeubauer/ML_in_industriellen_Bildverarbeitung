@@ -1,8 +1,13 @@
-"""Exercise 6.2: Optionale Untersuchung veränderter Accuracy.
+"""Exercise 6.2: 
 
-Aufgabenstellung: Ermittle, warum sich Accuracy nach erneutem Training ändert.
-Die Lösung demonstriert: zufällige Splits/Initialisierungen ändern Ergebnisse;
-feste random_state-Werte machen den gesamten Ablauf reproduzierbar.
+Optional: If we rerun our training, we can see that the results change slightly. 
+Find out what has changed.
+
+Note: This is not optimal, but the upside is we control the ETL so we can actually 
+make sure that a new image is processed in the same fashion and we do not need to ask 
+the authors of Brunton and Kutz (2022) to help us out.
+
+
 """
 
 from sklearn.datasets import load_iris
