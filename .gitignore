@@ -205,6 +205,8 @@ tempCodeRunnerFile.py
 
 # Generated nested DVC demo repositories
 results/exercise_5_4/
+results/exercise_5_5/
+exercises/05_code_management/exercise_5_5_dvc_remote.py
 results/.dvc_site_cache/repo/
 
 # Ruff stuff:
