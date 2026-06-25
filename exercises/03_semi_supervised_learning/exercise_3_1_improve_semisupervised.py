@@ -6,7 +6,7 @@ Aufgabenstellung:
     3. We can use other methods we have seen in Chapter 2 and combine them into ensemble learning.
     4. By starting to additionally label observations where our classifier is the least sure about.
     5. We can again work with clusters to smartly label additional observations.
-    
+
     Note: if we use all the 60000 samples we get about 84% with the presented steps.
 
 Aufruf: pdm run python exercises/03_semi_supervised_learning/exercise_3_1_improve_semisupervised.py
@@ -110,14 +110,14 @@ def main():
     )
 
     score, kmeans, labeled, forest = best_cluster_model(train_x, train_y, test_x, test_y)
-    print(f"Optimierte Cluster-Repräsentanten ({len(labeled)} Labels): {score:.3f}")
+    print(f"Optimierte Cluster ({len(labeled)} Labels): {score:.3f}")
 
     ensemble = create_ensemble(forest)
     ensemble.fit(train_x[labeled], train_y[labeled])
 
     ensemble_predictions = ensemble.predict(test_x)
     ensemble_score = accuracy_score(test_y, ensemble_predictions)
-    print(f"Ensemble mit Cluster-Repräsentanten: {ensemble_score:.3f}")
+    print(f"Ensemble mit Cluster: {ensemble_score:.3f}")
 
     uncertain_labeled = add_uncertain_examples(forest, train_x, labeled)
     ensemble.fit(train_x[uncertain_labeled], train_y[uncertain_labeled])
@@ -130,7 +130,7 @@ def main():
     forest.fit(train_x, propagated_y)
 
     propagated_score = forest.score(test_x, test_y)
-    print(f"Cluster-Label-Übertragung auf alle Trainingsdaten: {propagated_score:.3f}")
+    print(f"Cluster Label Übertragung auf allle Trainingsdaten: {propagated_score:.3f}")
 
 
 if __name__ == "__main__":
