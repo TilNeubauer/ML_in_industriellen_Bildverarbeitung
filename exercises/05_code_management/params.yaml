@@ -3,7 +3,23 @@ pipeline:
   steps:
     - name: scale
       type: sklearn.preprocessing.StandardScaler
-    - name: classifier
-      type: sklearn.svm.SVC
+    - name: pca
+      type: sklearn.decomposition.PCA
       init_args:
-        C: 2
+        n_components: 2
+    - name: classifier
+      type: sklearn.ensemble.VotingClassifier
+      init_args:
+        voting: hard
+      estimators:
+        - name: lda
+          type: sklearn.discriminant_analysis.LinearDiscriminantAnalysis
+        - name: svc
+          type: sklearn.svm.SVC
+          init_args:
+            C: 2
+            random_state: 6020
+        - name: tree
+          type: sklearn.tree.DecisionTreeClassifier
+          init_args:
+            random_state: 6020
