@@ -1,0 +1,5 @@
+Exercise 4.1: SVC Persistence
+
+Gespeichertes Modell: iris_svc.joblib
+Test-Accuracy nach Wiederherstellung: 0.921
+Vorhersagen identisch: True
