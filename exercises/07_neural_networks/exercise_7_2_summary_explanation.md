@@ -1,37 +1,35 @@
-# Exercise 7.2 – Explain the output of `.summary()`
+# Exercise 7.2: Explain `.summary()`
 
-## Aufgabenstellung
+## Param #
 
-Erkläre die Spalte `Param #` der erweiterten Ausgabe von `torchinfo.summary()`.
-Leite die Zahlen her. Was sagt eine Parametergröße von `8.03125 KB` über den
-verwendeten Datentyp aus?
+Nur `Linear`-Layer haben trainierbare Parameter. `Tanh` hat keine Gewichte und keinen Bias.
 
-## Lösung
-
-Das Modell besteht aus zwei trainierbaren `Linear`-Schichten. `Tanh` besitzt
-keine trainierbaren Parameter und erhält deshalb `--` in der Spalte `Param #`.
-
-
-| Layer | Rechnung | Parameter |
-| --- | --- | ---: |
-| Erste lineare Schicht (`1024 → 2`) | Gewichte: `2 × 1024`; Bias: `2` | `2 × 1024 + 2 = 2,050` |
-| `Tanh` | keine Gewichte, kein Bias | `0` |
-| Zweite lineare Schicht (`2 → 2`) | Gewichte: `2 × 2`; Bias: `2` | `2 × 2 + 2 = 6` |
-| **Gesamt** | `2,050 + 6` | **2,056** |
-
-Für eine lineare Schicht mit `n_in` Eingängen und `n_out` Ausgängen gilt also:
+Für einen `Linear`-Layer gilt:
 
 ```text
-Param # = n_out × n_in + n_out
-          Gewichte       Bias
+Parameter = n_out * n_in + n_out
+            Gewichte       Bias
 ```
 
-Die Parameter belegen `8.03125 KB`:
+Im Modell:
 
 ```text
-2,056 Parameter × 4 Byte = 8,224 Byte
-8,224 Byte / 1,024 = 8.03125 KB
+Linear 1024 -> 2: 2 * 1024 + 2 = 2050
+Tanh:             0
+Linear 2 -> 2:    2 * 2 + 2    = 6
+
+Gesamt: 2050 + 6 = 2056
 ```
 
-Jeder Parameter braucht damit **4 Byte**. Das entspricht dem üblichen
-PyTorch-Standarddatentyp **`torch.float32`** (32 Bit pro Parameter).
+## Datentyp
+
+Die Parameter brauchen `8.03125 KB` Speicher:
+
+```text
+2056 * 4 Byte = 8224 Byte
+8224 / 1024   = 8.03125 KB
+```
+
+Ein Parameter braucht also `4 Byte`.
+
+Das entspricht `float32`, also 32 Bit pro Parameter.
