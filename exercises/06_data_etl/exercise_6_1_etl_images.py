@@ -1,9 +1,18 @@
-"""Exercise 6.1: Extension of the ETL.
+"""Exercise 6.1: 
+To get more into image processing extend the ETL with the following steps:
 
-From the original .mat files extract the single images and store them in a
-lossless image format, separated by class and train/test split.
-Extend transformation, storage, and loading so that data/raw is enough to
-recover classes and splits automatically.
+    From the original .mat files extract the single images and store them in an appropriate format - 
+    consider compression loss - separate for the two classes.
+
+    Split them up into a test and a training set. The structure should look like the following tree.
+
+    Extend the transformation capabilities to allow an image as input.
+
+    Extend the storage capabilities to store the transformed images in an appropriate image format.
+
+    Extend the load capabilities so that only a folder needs to be specified (in our case data/raw), 
+    and the classes, as well as the test and training sets, are generated automatically from these files.
+
 
 Aufruf: pdm run python exercises/06_data_etl/exercise_6_1_etl_images.py
 """
