@@ -1,59 +1,123 @@
-"""Exercise 6.1: ETL für Cats-vs-Dogs-Bilder.
+"""Exercise 6.1: Extension of the ETL.
 
-Aufgabenstellung:
-1. Extrahiere Einzelbilder aus .mat-Dateien, getrennt nach Klassen.
-2. Teile sie in Train/Test auf.
-3. Erlaube Bildtransformationen.
-4. Speichere transformierte Bilder verlustfrei.
-5. Lade Klassen sowie Train/Test allein aus dem Ordner data/raw.
+From the original .mat files extract the single images and store them in a
+lossless image format, separated by class and train/test split.
+Extend transformation, storage, and loading so that data/raw is enough to
+recover classes and splits automatically.
 
 Aufruf: pdm run python exercises/06_data_etl/exercise_6_1_etl_images.py
 """
 
 from pathlib import Path
+from shutil import copyfile
+from shutil import rmtree
+from urllib.request import urlopen
 
 import numpy as np
 from PIL import Image, ImageOps
-from scipy.io import loadmat, savemat
+from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
 
 RESULTS = Path("results/exercise_6_1")
+MAT_DIR = RESULTS / "mat"
+RAW_DIR = RESULTS / "data" / "raw"
+TRANSFORMED_DIR = RESULTS / "data" / "transformed"
+CACHE_DIR = Path("results/exercise_2_8/dogs_cats_data")
+BASE_URL = "https://github.com/dynamicslab/databook_python/raw/refs/heads/master/DATA"
 SEED = 6020
 
 
-def extract_mat(mat_file, key, class_name, output, test_size=.25):
-    """Speichert Bilder einer (H, W, N)-Matrix verlustfrei als PNG in Train/Test."""
-    images = loadmat(mat_file)[key]
-    train, test = train_test_split(range(images.shape[-1]), test_size=test_size, random_state=SEED)
-    for split, indices in (("train", train), ("test", test)):
-        folder = output / class_name / split; folder.mkdir(parents=True, exist_ok=True)
-        for index in indices:
-            Image.fromarray(images[..., index].astype("uint8")).save(folder / f"{class_name}{index}.png")
+def ensure_mat_file(animal):
+    target = MAT_DIR / f"{animal}Data.mat"
+    cached = CACHE_DIR / target.name
+
+    if target.exists():
+        return target
+
+    MAT_DIR.mkdir(parents=True, exist_ok=True)
+    if cached.exists():
+        copyfile(cached, target)
+        return target
+
+    with urlopen(f"{BASE_URL}/{target.name}", timeout=60) as response:
+        target.write_bytes(response.read())
+
+    return target
 
 
-def transform(image):
-    """Beispieltransformation: horizontal spiegeln, Eingabe kann PIL- oder NumPy-Bild sein."""
-    return ImageOps.mirror(Image.fromarray(np.asarray(image)))
+def load_mat_images(animal):
+    matrix = loadmat(ensure_mat_file(animal))[animal]
+    return matrix.T.reshape(-1, 64, 64).astype(np.uint8)
 
 
-def load_folders(root, apply_transform=False):
-    """Ermittelt Klassen und Splits aus der Ordnerstruktur automatisch."""
+def save_images(images, animal, output, test_size=0.25):
+    indices = np.arange(len(images))
+    train_indices, test_indices = train_test_split(
+        indices,
+        test_size=test_size,
+        random_state=SEED,
+    )
+
+    for split, split_indices in (("train", train_indices), ("test", test_indices)):
+        folder = output / animal / split
+        folder.mkdir(parents=True, exist_ok=True)
+
+        for index in split_indices:
+            image = Image.fromarray(images[index])
+            image.save(folder / f"{animal}{index}.png")
+
+
+def transform_image(image):
+    image = Image.fromarray(np.asarray(image))
+    return ImageOps.mirror(image)
+
+
+def save_transformed_images(raw_root, output):
+    for image_path in raw_root.glob("*/*/*.png"):
+        relative_path = image_path.relative_to(raw_root)
+        target_path = output / relative_path
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+
+        transformed = transform_image(Image.open(image_path))
+        transformed.save(target_path)
+
+
+def load_image_folders(root):
     data = {}
-    for class_dir in root.iterdir():
-        for split_dir in class_dir.iterdir():
-            data[class_dir.name, split_dir.name] = [transform(Image.open(path)) if apply_transform else Image.open(path) for path in split_dir.glob("*.png")]
+
+    for class_dir in sorted(path for path in root.iterdir() if path.is_dir()):
+        for split_dir in sorted(path for path in class_dir.iterdir() if path.is_dir()):
+            images = [
+                Image.open(path).copy()
+                for path in sorted(split_dir.glob("*.png"))
+            ]
+            data[class_dir.name, split_dir.name] = images
+
     return data
 
 
 def main():
-    RESULTS.mkdir(parents=True, exist_ok=True)
-    rng = np.random.default_rng(SEED)
-    for name in ("cat", "dog"):
-        file = RESULTS / f"{name}.mat"; savemat(file, {f"{name}_images": rng.integers(0, 256, (16, 16, 12), dtype=np.uint8)})
-        extract_mat(file, f"{name}_images", name, RESULTS / "data" / "raw")
-    loaded = load_folders(RESULTS / "data" / "raw", apply_transform=True)
-    print("Geladene Bilder pro Klasse/Split:", {key: len(value) for key, value in loaded.items()})
-    assert sum(map(len, loaded.values())) == 24
+    for folder in (RAW_DIR, TRANSFORMED_DIR):
+        if folder.exists():
+            rmtree(folder)
+
+    for animal in ("cat", "dog"):
+        images = load_mat_images(animal)
+        save_images(images, animal, RAW_DIR)
+
+    save_transformed_images(RAW_DIR, TRANSFORMED_DIR)
+    loaded = load_image_folders(RAW_DIR)
+
+    counts = {key: len(images) for key, images in loaded.items()}
+    print("Geladene Bilder pro Klasse/Split:", counts)
+
+    assert counts == {
+        ("cat", "test"): 20,
+        ("cat", "train"): 60,
+        ("dog", "test"): 20,
+        ("dog", "train"): 60,
+    }
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
