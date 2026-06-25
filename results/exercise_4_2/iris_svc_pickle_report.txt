@@ -1,0 +1,6 @@
+Exercise 4.2: Pickle Persistence
+
+Gespeichertes Modell: iris_svc.pkl
+Dateigroesse: 3734 Bytes
+Test-Accuracy nach Wiederherstellung: 0.921
+Vorhersagen identisch: True
