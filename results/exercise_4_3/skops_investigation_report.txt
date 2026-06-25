@@ -1,0 +1,10 @@
+Exercise 4.3: skops.io Untersuchungen
+
+PCA float64 Datei: 207527 Bytes
+PCA float16 Datei: 207479 Bytes
+Reduktion: 0.0 %
+
+Custom-Kernel Modell: svc_custom_kernel.skops
+Unbekannte Typen: ['__main__.custom_rbf_kernel']
+Test-Accuracy nach Wiederherstellung: 0.921
+Vorhersagen identisch: True

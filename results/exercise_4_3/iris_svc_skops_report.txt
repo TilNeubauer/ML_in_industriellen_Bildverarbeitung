@@ -1,0 +1,7 @@
+Exercise 4.3: skops.io Persistence
+
+Gespeichertes Modell: iris_svc.skops
+Dateigroesse: 37999 Bytes
+Unbekannte Typen: []
+Test-Accuracy nach Wiederherstellung: 0.921
+Vorhersagen identisch: True
