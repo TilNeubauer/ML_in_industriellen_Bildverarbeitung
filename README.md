@@ -9,5 +9,3 @@ pdm run python exercises/01_unsupervised_learning/exercise_1_1_kmeans.py
 ```
 
 Erzeugte Abbildungen werden unter `results/` abgelegt.
-
-Aktuell umgesetzt: die Exercises 1.1–1.4 sowie 2.1–2.9.
