@@ -1,8 +1,7 @@
-"""Exercise 5.1: Schutz vor Training in einem dirty Git-Repository.
-
-Aufgabenstellung: Implementiere mit GitPython eine Funktion oder einen Decorator,
-der Training nur in einem nicht-dirty Repository erlaubt. Optional: Prüfe, ob der
-lokale Stand hinter dem Remote zurückliegt.
+"""Exercise 5.1: 
+    Implement a function (or a decorator) in Python that uses GitPython 
+    (alternatives or the plain shell can also be used) to introduce a safeguard such that 
+    training can only be called if the repository is not dirty.
 """
 
 from functools import wraps
